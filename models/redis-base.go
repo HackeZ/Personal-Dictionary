@@ -1,7 +1,10 @@
 package models
 
 import (
+	"log"
 	"time"
+
+	"github.com/astaxie/beego"
 
 	"github.com/garyburd/redigo/redis"
 )
@@ -9,39 +12,35 @@ import (
 var (
 	// RedisClient a available Redis Client.
 	RedisClient *redis.Pool
-	// RedisDB The number of DB in Redis.
-	RedisDB = 2
+	// REDIS_DB The number of DB in Redis.
+	REDIS_DB int
+	// REDIS_HOST Host
+	REDIS_HOST string
 )
 
-// initRedis Connect RedisDB and Make it available.
-func initRedis(host string) *redis.Pool {
-	return &redis.Pool{
+func init() {
+	REDIS_HOST = beego.AppConfig.String("redis_host")
+	REDIS_DB, _ = beego.AppConfig.Int("redis_db")
+
+	if REDIS_HOST == "" {
+		REDIS_HOST = ":6379"
+	}
+	if REDIS_DB == 0 {
+		log.Println("May Your Setting Have Not Set 'redis_db', use default ==> 0")
+	}
+
+	RedisClient = &redis.Pool{
 		MaxIdle:     64,
 		IdleTimeout: 3 * time.Second,
-		MaxActive:   99999, // max number of connections
-		// TestOnBorrow: func(c redis.Conn, t time.Time) error {
-		// 	_, err := c.Do("PING")
-
-		// 	return err
-		// },
+		MaxActive:   99999,
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", host)
+			c, err := redis.Dial("tcp", REDIS_HOST)
 			if err != nil {
 				return nil, err
 			}
-			return c, err
+			// Choose DB
+			c.Do("SELECT", REDIS_DB)
+			return c, nil
 		},
 	}
-}
-
-// GetRedisClient return an available Redis Client.
-// Usage:
-//      GetRedisClient()
-//      // Get a Conn from Pool
-//      rc := RedisClient.Get()
-//      // Return Conn into Pool When you are Done.
-//      defer rc.Close()
-//
-func GetRedisClient() {
-	RedisClient = initRedis(":6379")
 }
