@@ -22,3 +22,10 @@
 ```
 $ go get github.com/bmizerany/pat
 ```
+
+## Usage
+
+```
+$ bee run # if you syncdb already.
+$ bee run -syncdb # if you run this app at first time.
+```
