@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	beego.Run(beego.AppConfig.String("httpport"))
+	beego.Run("127.0.0.1:" + beego.AppConfig.String("httpport"))
 }

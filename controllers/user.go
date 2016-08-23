@@ -8,8 +8,9 @@ import (
 	"github.com/astaxie/beego"
 )
 
+// UserController Login & Logout & SignUp.
 type UserController struct {
-	*beego.Controller
+	beego.Controller
 }
 
 // Login do Login or Show Login Page.
@@ -29,13 +30,9 @@ func (c *UserController) Login() {
 		c.Resp(false, err.Error())
 		return
 	}
-	uinfo := c.GetSession("userinfo")
-	// Login Success!
-	if uinfo != nil {
-		c.Ctx.Redirect(302, "/index")
-	}
 	// Login Fail! relogin.
-	c.TplName = "/login.tpl"
+	c.Data["Title"] = beego.AppConfig.String("login_title")
+	c.TplName = "login.tpl"
 }
 
 func doLogin(username, password string) (m.User, error) {
@@ -48,9 +45,9 @@ func doLogin(username, password string) (m.User, error) {
 	}, nil
 }
 
-func SignUp() {
+// func SignUp() {
 
-}
+// }
 
 // Logout ...
 func (c *UserController) Logout() {

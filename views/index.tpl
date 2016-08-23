@@ -22,6 +22,7 @@
     header,
     footer {
       width: 960px;
+      text-align: center;
       margin-left: auto;
       margin-right: auto;
     }
@@ -61,7 +62,7 @@
 
 <body>
   <header>
-      <p>{{.Welcome}}</p>  
+      <p>{{.Title}}</p>  
   </header>
   <footer>
     <div class="author">

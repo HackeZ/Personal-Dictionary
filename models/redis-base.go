@@ -10,20 +10,20 @@ var (
 	// RedisClient a available Redis Client.
 	RedisClient *redis.Pool
 	// RedisDB The number of DB in Redis.
-	RedisDB = 0
+	RedisDB = 2
 )
 
 // initRedis Connect RedisDB and Make it available.
-func initRedis(host string) (*redis.Pool, error) {
+func initRedis(host string) *redis.Pool {
 	return &redis.Pool{
 		MaxIdle:     64,
 		IdleTimeout: 3 * time.Second,
 		MaxActive:   99999, // max number of connections
-		TestOnBorrow: func(c redis.Conn, t time.Time) error {
-			_, err := c.Do("PING")
+		// TestOnBorrow: func(c redis.Conn, t time.Time) error {
+		// 	_, err := c.Do("PING")
 
-			return err
-		},
+		// 	return err
+		// },
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.Dial("tcp", host)
 			if err != nil {
@@ -31,17 +31,17 @@ func initRedis(host string) (*redis.Pool, error) {
 			}
 			return c, err
 		},
-	}, nil
+	}
 }
 
 // GetRedisClient return an available Redis Client.
-/* Usage:
- *      GetRedisClient()
- *      // Get a Conn from Pool
- *      rc := RedisClient.Get()
- *      // Return Conn into Pool When you are Done.
- *      defer rc.Close()
- */
+// Usage:
+//      GetRedisClient()
+//      // Get a Conn from Pool
+//      rc := RedisClient.Get()
+//      // Return Conn into Pool When you are Done.
+//      defer rc.Close()
+//
 func GetRedisClient() {
-	RedisClient, _ = initRedis(":6379")
+	RedisClient = initRedis(":6379")
 }
