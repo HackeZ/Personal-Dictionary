@@ -5,6 +5,8 @@ import (
 	"log"
 	"time"
 
+	"Personal-Dictionary/utils"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
@@ -64,7 +66,80 @@ func GetUserList(page int64, pageSize int64, sort string) (users []orm.Params, c
 	} else {
 		offset = (page - 1) * pageSize
 	}
-	qs.Limit(pageSize, offset).OrderBy(sort).Values(&users)
+	qs.Limit(pageSize, offset).OrderBy(sort).Values(&users, "Id", "Username", "Email", "Createtime", "Lastlogintime")
 	count, _ = qs.Count()
 	return users, count
+}
+
+// AddUser 添加用户
+func AddUser(u *User) (int64, error) {
+	if err := checkUser(u); err != nil {
+		return 0, err
+	}
+
+	o := orm.NewOrm()
+	user := new(User)
+	user.Username = u.Username
+
+	// Get New Salt and Handle Password.
+	var saltLength int64
+	if beego.AppConfig.String("salt_length") == "" {
+		saltLength = 8
+	} else {
+		saltLength, _ = utils.Atoi64(beego.AppConfig.String("salt_length"))
+	}
+	userSalt := utils.GetNewSalt(saltLength)
+	user.Salt = userSalt
+	user.Password = utils.PassEncode(u.Password, user.Salt)
+	user.Email = u.Email
+
+	id, err := o.Insert(user)
+	return id, err
+}
+
+// UpdateUser 更新用户信息
+func UpdateUser(u *User) (int64, error) {
+	if err := checkUser(u); err != nil {
+		return 0, err
+	}
+
+	o := orm.NewOrm()
+	user := make(orm.Params)
+	if len(u.Username) > 0 {
+		user["Username"] = u.Username
+	}
+	if len(u.Email) > 0 {
+		user["Email"] = u.Email
+	}
+
+	var table User
+	number, err := o.QueryTable(table).Filter("Id", u.Id).Update(user)
+	return number, err
+}
+
+// DelUserById 删除用户
+func DelUserById(Id int64) (int64, error) {
+	o := orm.NewOrm()
+
+	status, err := o.Delete(&User{Id: Id})
+	return status, err
+}
+
+/********************* Danger
+  Should Be Del in Produce Env.
+   *************************/
+
+// GetUserByUsername 获取用户信息
+func GetUserByUsername(username string) (user User) {
+
+	if env := beego.AppConfig.String("runmode"); env == "dev" {
+		user = User{Username: username}
+		o := orm.NewOrm()
+		log.Println("user -->", user)
+
+		o.Read(&user, "Username")
+		return user
+	}
+
+	return User{}
 }
