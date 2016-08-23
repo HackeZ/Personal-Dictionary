@@ -131,9 +131,12 @@ func insertUser() {
 	salt := utils.GetNewSalt(8)
 	u.Salt = salt
 	u.Password = utils.PassEncode("admin", salt)
-	u.Email = "767110505@qq.com"
+	u.Email = "hackerzgz@gmail.com"
 
 	o := orm.NewOrm()
-	o.Insert(u)
+	_, err := o.Insert(u)
+	if err != nil {
+		log.Println(" insert user error -->", err.Error())
+	}
 	fmt.Println("=== insert User done... ===")
 }
