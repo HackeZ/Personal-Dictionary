@@ -27,5 +27,5 @@ $ go get github.com/bmizerany/pat
 
 ```
 $ bee run # if you syncdb already.
-$ bee run -syncdb # if you run this app at first time.
+$ ./Personal-Dictionry -syncdb # if you run this app at first time.
 ```

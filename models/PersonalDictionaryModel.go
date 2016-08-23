@@ -7,10 +7,10 @@ import (
 
 // PersonalDictionary Save Personal Dictionary Info.
 type PersonalDictionary struct {
-	Id      int64
-	User    *User  `orm:"rel(fk);size(32)" form:"Username"  valid:"Required;MaxSize(20);MinSize(6)"`
-	Keyword string `orm:"size(256);index" form:"Keyword" valid:"Required;MaxSize(256);MinSize(0)"`
-	Content string `orm:"size(65532)" form:"Content" valid:"MaxSize(65535);MinSize(0)"`
+	Id       int64
+	Username *User  `orm:"rel(fk);size(32)" form:"Username"  valid:"Required;MaxSize(20);MinSize(6)"`
+	Keyword  string `orm:"size(256);index" form:"Keyword" valid:"Required;MaxSize(256);MinSize(0)"`
+	Content  string `orm:"size(65532)" form:"Content" valid:"MaxSize(65535);MinSize(0)"`
 	// Tags string
 }
 
@@ -46,7 +46,7 @@ func AddPersonalDictionary(pd *PersonalDictionary) (int64, error) {
 	o := orm.NewOrm()
 	perdic := new(PersonalDictionary)
 
-	perdic.User = pd.User
+	perdic.Username = pd.Username
 	perdic.Keyword = pd.Keyword
 	perdic.Content = pd.Content
 

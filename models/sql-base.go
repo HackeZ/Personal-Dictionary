@@ -17,6 +17,7 @@ import (
 
 var o orm.Ormer
 
+// Connect 连接数据库
 func Connect() {
 
 	var dns string
@@ -68,6 +69,7 @@ func Syncdb() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	// 插入默认数据
 	insertUser()
 	fmt.Println("database init is complete.\nPlease restart the application")
 }

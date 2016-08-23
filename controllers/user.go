@@ -45,9 +45,34 @@ func doLogin(username, password string) (m.User, error) {
 	}, nil
 }
 
-// func SignUp() {
+// SignUp 注册新用户
+func (c *UserController) SignUp() {
+	isAjax := c.GetString("isajax")
 
-// }
+	if isAjax == "1" {
+		username := c.GetString("username")
+		password := c.GetString("password")
+		repass := c.GetString("repass")
+		email := c.GetString("email")
+
+		newUser := m.User{
+			Username:   username,
+			Password:   password,
+			Repassword: repass,
+			Email:      email,
+		}
+
+		_, err := m.AddUser(&newUser)
+
+		if err == nil {
+			c.Resp(true, "注册成功！欢迎使用你的个人词典！")
+			return
+		}
+		c.Resp(false, err.Error())
+		return
+
+	}
+}
 
 // Logout ...
 func (c *UserController) Logout() {
