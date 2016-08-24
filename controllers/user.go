@@ -1,7 +1,9 @@
 package controllers
 
 import (
-	"time"
+	"YuXuan-Admin/utils"
+	"errors"
+	"log"
 
 	m "Personal-Dictionary/models"
 
@@ -16,10 +18,14 @@ type UserController struct {
 // Login do Login or Show Login Page.
 func (c *UserController) Login() {
 	isAjax := c.GetString("isajax")
+	log.Println("isAjax -->", isAjax)
 
 	if isAjax == "1" {
 		username := c.GetString("username")
 		password := c.GetString("password")
+
+		log.Println("username -->", username)
+		log.Println("password -->", password)
 
 		user, err := doLogin(username, password)
 		if err == nil {
@@ -36,13 +42,15 @@ func (c *UserController) Login() {
 }
 
 func doLogin(username, password string) (m.User, error) {
-	return m.User{
-		Id:         1,
-		Username:   "HackerZ",
-		Password:   "hackerzgz",
-		Salt:       "zgz",
-		Createtime: time.Now(),
-	}, nil
+	user := m.GetUserByUsername(username)
+
+	if user.Id == 0 {
+		return user, errors.New("用户不存在")
+	}
+	if user.Password != utils.PassEncode(password, user.Salt) {
+		return m.User{}, errors.New("密码错误")
+	}
+	return user, nil
 }
 
 // SignUp 注册新用户

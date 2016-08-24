@@ -1,6 +1,10 @@
 package controllers
 
-import "github.com/astaxie/beego"
+import (
+	"log"
+
+	"github.com/astaxie/beego"
+)
 
 // MainController Personal-Dictionary main Controllers
 type MainController struct {
@@ -14,7 +18,29 @@ func (c *MainController) Index() {
 
 // PdIndex Show PdIndex
 func (c *MainController) PdIndex() {
+	log.Println("UserSession --> ", c.GetSession("userinfo"))
 	c.Data["Title"] = beego.AppConfig.String("login_title")
 	c.Data["Welcome"] = "Welcome to your Personal Dictionary."
 	c.TplName = "index.tpl"
+}
+
+// AddPersonalDictionary 添加一条个人词典
+func (c *MainController) AddPersonalDictionary() {
+
+	// Login Check.
+	user := c.GetSession("userinfo")
+	if user == nil {
+		c.Resp(false, "你还没有登录，请登录后再试！")
+		return
+	}
+
+	log.Println("UserSession -->", user)
+
+	// keyword := c.GetString("Keyword")
+	// content := c.GetString("Content")
+
+	// pd := new(m.PersonalDictionary)
+	// pd.Keyword = keyword
+	// pd.Content = content
+
 }

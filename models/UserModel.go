@@ -129,17 +129,12 @@ func DelUserById(Id int64) (int64, error) {
   Should Be Del in Produce Env.
    *************************/
 
-// GetUserByUsername 获取用户信息
+// GetUserByUsername 获取用户信息（用于登录验证）
 func GetUserByUsername(username string) (user User) {
+	user = User{Username: username}
+	o := orm.NewOrm()
+	log.Println("user -->", user)
 
-	if env := beego.AppConfig.String("runmode"); env == "dev" {
-		user = User{Username: username}
-		o := orm.NewOrm()
-		log.Println("user -->", user)
-
-		o.Read(&user, "Username")
-		return user
-	}
-
-	return User{}
+	o.Read(&user, "Username")
+	return user
 }

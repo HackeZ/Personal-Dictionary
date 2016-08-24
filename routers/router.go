@@ -17,4 +17,5 @@ func init() {
 
 	// PD
 	beego.Router("/pb", &controllers.MainController{}, "*:PdIndex")
+	beego.Router("/pd/add", &controllers.MainController{}, "post:AddPersonalDictionary")
 }

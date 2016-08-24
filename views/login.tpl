@@ -30,9 +30,35 @@
             });
             //验证码
             createCode();
-            //测试提交，对接程序删除即可
+            // 提交登录
+
+            var URL = "/login"
             $(".submit_btn").click(function() {
-                location.href = "javascrpt:;" /*tpa=http://***index.html*/ ;
+                // AJAX 提交
+                $.ajax({
+                    type: "POST",
+                    url: URL + "?isajax=1",
+                    data: {
+                        username:$("#id_username").val(),
+                        password:$("#id_password").val()
+                    },
+                    sync: false,
+                    error: function() {
+                        $(".login_tips").text("网络出问题了，请联系管理员！")
+                        $("#id_username").val("").focus();
+                        $("#id_password").val("");
+                    },
+                    success: function(data) {
+                        if (data.status) {
+                            location.href = "/pb"
+                        } else {
+
+                            $(".login_tips").text(data.info)
+                            $("#id_username").val("").focus();
+                            $("#id_password").val("");
+                        }
+                    }
+                });
             });
         });
     </script>
@@ -43,25 +69,33 @@
         <dt>
   <strong>{{ .Title }}</strong>
  </dt>
-        <dd class="user_icon">
-            <input type="text" placeholder="账号" class="login_txtbx" required/>
-        </dd>
-        <dd class="pwd_icon">
-            <input type="password" placeholder="密码" class="login_txtbx" required/>
-        </dd>
-        <dd class="val_icon">
-            <div class="checkcode">
-                <input type="text" id="J_codetext" placeholder="验证码" maxlength="4" class="login_txtbx">
-                <canvas class="J_codeimg" id="myCanvas" onclick="createCode()">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
+        <form id="form">
+            <div class="form-item">
+                <dd class="user_icon">
+                    <input id="id_username" type="text" placeholder="账号" class="login_txtbx" required/>
+                </dd>
             </div>
-            <input type="button" value="Check" class="ver_btn" onClick="validate();">
-        </dd>
-        <dd>
-            <input type="button" value="立即登陆" class="submit_btn" />
-        </dd>
-        <dd>
-            <p>{{ .Copyright }}</p>
-        </dd>
+            <dd class="pwd_icon">
+                <input id="id_password" type="password" placeholder="密码" class="login_txtbx" required/>
+            </dd>
+            <dd class="val_icon">
+                <div class="checkcode">
+                    <input type="text" id="J_codetext" placeholder="验证码" maxlength="4" class="login_txtbx">
+                    <canvas class="J_codeimg" id="myCanvas" onclick="createCode()">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
+                </div>
+                <input type="button" value="Check" class="ver_btn" onClick="validate();">
+            </dd>
+            <dd>
+                <input type="button" value="立即登陆" class="submit_btn" />
+            </dd>
+            <dd>
+                <p class="login_tips"></p>
+            </dd>
+            <dd>
+                <p>{{ .Copyright }}</p>
+            </dd>
+        </form>
+
     </dl>
 </body>
 
