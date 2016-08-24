@@ -18,9 +18,11 @@ func (c *MainController) Index() {
 
 // PdIndex Show PdIndex
 func (c *MainController) PdIndex() {
-	log.Println("UserSession --> ", c.GetSession("userinfo"))
+	user := c.GetString("userinfo")
+
+	log.Println("UserSession --> ", user)
 	c.Data["Title"] = beego.AppConfig.String("login_title")
-	c.Data["Welcome"] = "Welcome to your Personal Dictionary."
+	c.Data["Welcome"] = "Welcome to " + user + "' Personal Dictionary."
 	c.TplName = "index.tpl"
 }
 
@@ -29,12 +31,13 @@ func (c *MainController) AddPersonalDictionary() {
 
 	// Login Check.
 	user := c.GetSession("userinfo")
+
 	if user == nil {
 		c.Resp(false, "你还没有登录，请登录后再试！")
 		return
 	}
 
-	log.Println("UserSession -->", user)
+	log.Println("UserSession -->", user.(string))
 
 	// keyword := c.GetString("Keyword")
 	// content := c.GetString("Content")

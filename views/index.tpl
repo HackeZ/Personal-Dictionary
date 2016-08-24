@@ -67,6 +67,7 @@
   <footer>
     <div class="author">
       <p>{{.Welcome}}</p>
+      <p><a href="/logout">退出登录</a></p>
     </div>
   </footer>
   <div class="backdrop"></div>

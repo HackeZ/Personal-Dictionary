@@ -130,11 +130,11 @@ func DelUserById(Id int64) (int64, error) {
    *************************/
 
 // GetUserByUsername 获取用户信息（用于登录验证）
-func GetUserByUsername(username string) (user User) {
+func GetUserByUsername(username string) (user User, err error) {
 	user = User{Username: username}
 	o := orm.NewOrm()
 	log.Println("user -->", user)
 
-	o.Read(&user, "Username")
-	return user
+	err = o.Read(&user, "Username")
+	return user, err
 }

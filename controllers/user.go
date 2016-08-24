@@ -4,6 +4,7 @@ import (
 	"Personal-Dictionary/utils"
 	"errors"
 	"log"
+	"time"
 
 	m "Personal-Dictionary/models"
 
@@ -38,7 +39,7 @@ func (c *UserController) Login() {
 
 		user, err := doLogin(username, password)
 		if err == nil {
-			c.SetSession("userinfo", user)
+			c.SetSession("userinfo", user.Username)
 			c.Resp(true, "登陆成功")
 			return
 		}
@@ -59,7 +60,7 @@ func (c *UserController) Login() {
 }
 
 func doLogin(username, password string) (m.User, error) {
-	user := m.GetUserByUsername(username)
+	user, _ := m.GetUserByUsername(username)
 
 	if user.Id == 0 {
 		return user, errors.New("用户不存在")
@@ -67,7 +68,18 @@ func doLogin(username, password string) (m.User, error) {
 	if user.Password != utils.PassEncode(password, user.Salt) {
 		return m.User{}, errors.New("密码错误")
 	}
+	// 更新最后登录时间
+	go updateLastLogintime(user)
+	// 清除敏感数据
+	user.Salt, user.Password, user.Repassword = "", "", ""
+
 	return user, nil
+}
+
+// updateLastLogintime 更新最后登录时间
+func updateLastLogintime(user m.User) {
+	user.Lastlogintime = time.Now()
+	m.UpdateUser(&user)
 }
 
 // SignUp 注册新用户
