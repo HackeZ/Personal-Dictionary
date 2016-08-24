@@ -68,7 +68,7 @@
         <form id="form">
             <div class="form-item">
                 <dd class="user_icon">
-                    <input id="id_username" name="username" type="text" placeholder="账号" class="login_txtbx" tabindex="1" required/>
+                    <input id="id_username" name="username" type="text" placeholder="用户名" class="login_txtbx" tabindex="1" required/>
                 </dd>
             </div>
             <dd class="pwd_icon">

@@ -3,6 +3,8 @@ package controllers
 import (
 	"log"
 
+	m "Personal-Dictionary/models"
+
 	"github.com/astaxie/beego"
 )
 
@@ -30,20 +32,26 @@ func (c *MainController) PdIndex() {
 func (c *MainController) AddPersonalDictionary() {
 
 	// Login Check.
-	user := c.GetSession("userinfo")
+	user := c.GetSession("userinfo").(string)
 
-	if user == nil {
+	if user == "" {
 		c.Resp(false, "你还没有登录，请登录后再试！")
 		return
 	}
+	loginUser, _ := m.GetUserByUsername(user)
 
-	log.Println("UserSession -->", user.(string))
+	keyword := c.GetString("Keyword")
+	content := c.GetString("Content")
 
-	// keyword := c.GetString("Keyword")
-	// content := c.GetString("Content")
+	pd := new(m.PersonalDictionary)
+	pd.User = &loginUser
+	pd.Keyword = keyword
+	pd.Content = content
 
-	// pd := new(m.PersonalDictionary)
-	// pd.Keyword = keyword
-	// pd.Content = content
-
+	_, err := m.AddPersonalDictionary(pd)
+	if err != nil {
+		c.Resp(false, err.Error())
+		return
+	}
+	c.Resp(true, "新建词典成功！")
 }

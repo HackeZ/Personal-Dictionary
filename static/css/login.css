@@ -63,7 +63,7 @@ small,weak{color:#666}
 .admin_login dd:before{font-family:'PingFang SC';position:absolute;top:0;left:10px;height:42px;line-height:42px;font-size:20px;color:#0c9076;}
 .admin_login dd.user_icon:before{content:"U";}
 .admin_login dd.pwd_icon:before{content:"P";}
-.admin_login dd.val_icon:before{content:"N";}
+.admin_login dd.val_icon:before{content:"V";}
 .admin_login dd .ver_btn{text-align:center;width: 75px;border:none;color:#f4f4f4;height:42px;line-height:42px;margin:0;z-index:1;position:relative;float:right;background:#48bca5;}
 .admin_login dd .checkcode{float:left;width:300px;height:42px;background:#fff}
 .admin_login dd .checkcode input{width:190px;height:36px;line-height:36px;padding:3px;color:white;outline:none;border:none;text-indent:2.8em;}
