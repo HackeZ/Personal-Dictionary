@@ -1,13 +1,15 @@
 package controllers
 
 import (
-	"YuXuan-Admin/utils"
+	"Personal-Dictionary/utils"
 	"errors"
 	"log"
 
 	m "Personal-Dictionary/models"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/cache"
+	"github.com/astaxie/beego/utils/captcha"
 )
 
 // UserController Login & Logout & SignUp.
@@ -15,17 +17,24 @@ type UserController struct {
 	beego.Controller
 }
 
+var cpt *captcha.Captcha
+
 // Login do Login or Show Login Page.
 func (c *UserController) Login() {
+
 	isAjax := c.GetString("isajax")
 	log.Println("isAjax -->", isAjax)
 
 	if isAjax == "1" {
+		// Captcha Verification.
+		if !cpt.VerifyReq(c.Ctx.Request) {
+			c.Resp(false, "验证码错误！")
+			return
+		}
+
+		// Passing Captcha Verify.
 		username := c.GetString("username")
 		password := c.GetString("password")
-
-		log.Println("username -->", username)
-		log.Println("password -->", password)
 
 		user, err := doLogin(username, password)
 		if err == nil {
@@ -38,6 +47,14 @@ func (c *UserController) Login() {
 	}
 	// Login Fail! relogin.
 	c.Data["Title"] = beego.AppConfig.String("login_title")
+
+	// Get Verification Code.
+	store := cache.NewMemoryCache()
+	cpt = captcha.NewWithFilter("/captcha/", store)
+	cpt.ChallengeNums, _ = beego.AppConfig.Int("captcha_length")
+	cpt.StdWidth = 100
+	cpt.StdHeight = 42
+
 	c.TplName = "login.tpl"
 }
 

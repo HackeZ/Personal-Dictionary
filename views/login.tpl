@@ -19,7 +19,6 @@
         }
     </style>
     <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
-    <script src="./static/js/verificationNumbers.js" tppabs="js/verificationNumbers.js"></script>
     <script src="./static/js/Particleground.js" tppabs="js/Particleground.js"></script>
     <script>
         $(document).ready(function() {
@@ -28,34 +27,31 @@
                 dotColor: '#5cbdaa',
                 lineColor: '#5cbdaa'
             });
-            //验证码
-            createCode();
-            // 提交登录
 
+            // 提交登录
             var URL = "/login"
             $(".submit_btn").click(function() {
                 // AJAX 提交
                 $.ajax({
                     type: "POST",
                     url: URL + "?isajax=1",
-                    data: {
-                        username:$("#id_username").val(),
-                        password:$("#id_password").val()
-                    },
+                    data: $('#form').serialize(),
                     sync: false,
                     error: function() {
                         $(".login_tips").text("网络出问题了，请联系管理员！")
                         $("#id_username").val("").focus();
                         $("#id_password").val("");
+                            $("input[name=captcha]").val("");                        
                     },
                     success: function(data) {
                         if (data.status) {
                             location.href = "/pb"
                         } else {
-
                             $(".login_tips").text(data.info)
                             $("#id_username").val("").focus();
                             $("#id_password").val("");
+                            $("input[name=captcha]").val("");
+                            $(".captcha-img").click();
                         }
                     }
                 });
@@ -72,19 +68,19 @@
         <form id="form">
             <div class="form-item">
                 <dd class="user_icon">
-                    <input id="id_username" type="text" placeholder="账号" class="login_txtbx" required/>
+                    <input id="id_username" name="username" type="text" placeholder="账号" class="login_txtbx" tabindex="1" required/>
                 </dd>
             </div>
             <dd class="pwd_icon">
-                <input id="id_password" type="password" placeholder="密码" class="login_txtbx" required/>
+                <input id="id_password" name="password" type="password" placeholder="密码" class="login_txtbx" tabindex="2" required/>
             </dd>
             <dd class="val_icon">
                 <div class="checkcode">
-                    <input type="text" id="J_codetext" placeholder="验证码" maxlength="4" class="login_txtbx">
-                    <canvas class="J_codeimg" id="myCanvas" onclick="createCode()">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
+                    {{create_captcha}}
+                    <input name="captcha" placeholder="请输入验证码" type="text" class="login_txtbx" tabindex="3" />
                 </div>
-                <input type="button" value="Check" class="ver_btn" onClick="validate();">
             </dd>
+            <br>
             <dd>
                 <input type="button" value="立即登陆" class="submit_btn" />
             </dd>
