@@ -13,15 +13,17 @@ type CommonController struct {
 }
 
 func init() {
-	var FiltAdmin = func(ctx *context.Context) {
-		uinfo := ctx.Input.CruSession.Get("userinfo")
-		log.Println("uinfo", uinfo)
-		if uinfo == nil {
-			ctx.Redirect(302, "/login")
+	if "dev" != beego.AppConfig.String("runmode") {
+		var FiltAdmin = func(ctx *context.Context) {
+			uinfo := ctx.Input.CruSession.Get("userinfo")
+			log.Println("uinfo", uinfo)
+			if uinfo == nil {
+				ctx.Redirect(302, "/login")
+			}
 		}
+		// 在访问 "/pb/*" URI 时，寻找路由器之前(BeforeRouter)，先进行 Check 验证访问过滤器
+		beego.InsertFilter("/pd", beego.BeforeRouter, FiltAdmin)
 	}
-	// 在访问 "/pb/*" URI 时，寻找路由器之前(BeforeRouter)，先进行 Check 验证访问过滤器
-	beego.InsertFilter("/pb", beego.BeforeRouter, FiltAdmin)
 }
 
 // Resp Response request Status and Info.

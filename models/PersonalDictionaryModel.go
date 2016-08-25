@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
@@ -32,6 +34,7 @@ func checkPD(pd *PersonalDictionary) (err error) {
 	if err == orm.ErrNoRows {
 		return nil
 	}
+	err = errors.New("你已经有这条词典了～ 找到并更新它吧！")
 	return
 }
 

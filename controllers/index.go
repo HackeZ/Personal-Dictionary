@@ -3,9 +3,9 @@ package controllers
 import (
 	"log"
 
-	m "Personal-Dictionary/models"
-
 	"github.com/astaxie/beego"
+
+	m "Personal-Dictionary/models"
 )
 
 // MainController Personal-Dictionary main Controllers
@@ -20,11 +20,21 @@ func (c *MainController) Index() {
 
 // PdIndex Show PdIndex
 func (c *MainController) PdIndex() {
-	user := c.GetString("userinfo")
+
+	// runmode = dev
+	user := c.GetSession("userinfo")
+
+	c.Data["Title"] = beego.AppConfig.String("login_title")
+	c.Data["User"] = "HackerZ"
+
+	// runmode = product
+	if c.GetSession("userinfo") != nil {
+		user := c.GetSession("userinfo").(string)
+		c.Data["Title"] = "Welcome to " + user + "' Personal Dictionary."
+		c.Data["User"] = user
+	}
 
 	log.Println("UserSession --> ", user)
-	c.Data["Title"] = beego.AppConfig.String("login_title")
-	c.Data["Welcome"] = "Welcome to " + user + "' Personal Dictionary."
 	c.TplName = "index.tpl"
 }
 
@@ -43,6 +53,11 @@ func (c *MainController) AddPersonalDictionary() {
 	keyword := c.GetString("Keyword")
 	content := c.GetString("Content")
 
+	// 数据合法性判断
+	if keyword == "" || content == "" {
+		c.Resp(false, "请先填写好数据再提交！")
+	}
+
 	pd := new(m.PersonalDictionary)
 	pd.User = &loginUser
 	pd.Keyword = keyword
@@ -54,4 +69,5 @@ func (c *MainController) AddPersonalDictionary() {
 		return
 	}
 	c.Resp(true, "新建词典成功！")
+	return
 }
