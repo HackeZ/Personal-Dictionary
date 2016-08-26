@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"time"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -14,6 +15,7 @@ type PersonalDictionary struct {
 	Keyword string `orm:"size(256);index" form:"Keyword" valid:"Required;MaxSize(256);MinSize(0)"`
 	Content string `orm:"size(256)" form:"Content" valid:"MaxSize(256);MinSize(0)"`
 	// Tags string
+	Createtime time.Time `orm:"type(datetime);auto_now_add" `
 }
 
 // TableName Personal-Dictionary Table Name.

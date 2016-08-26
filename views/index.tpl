@@ -24,9 +24,8 @@
       font-size: 14px;
       line-height: 20px;
       background-color: #fff;
-      box-shadow: inset 0px 0px 100px #ddd;      
+      box-shadow: inset 0px 0px 100px #ddd;
     }
-    
     /*header,
     footer {
       width: 960px;
@@ -55,7 +54,6 @@
       color: #444;
       text-decoration: none;
     }
-    
     /*.backdrop {
       position: absolute;
       width: 100%;
@@ -65,13 +63,15 @@
       top: 0px;
       left: 0px;
     }*/
+    
     section {
-      margin-bottom: 200px;
+      margin-top: 20px;
+      margin-bottom: 150px;
       text-align: center;
-      margin-right:200px;
+      margin-right: 200px;
     }
   </style>
-  
+
 </head>
 
 <body>
@@ -96,23 +96,39 @@
   <!-- HEADER -->
 
   <!-- CONTENT -->
+
   <section>
     <h2><a href="#PD1" name="PD1">PD 1</a></h2>
     <article>
+      <div class="feat">
+        <h5 class="pd-date">
+        <time datetime>2016-08-20 11:20</time>
+        </h5>
+      </div>
       This is PD 1.
     </article>
   </section>
 
-  <section name="PD2">
+  <section>
     <h2><a href="#PD2" name="PD2">PD 2</a></h2>
     <article>
+      <div class="feat">
+        <h5 class="pd-date">
+        <time datetime>2026-08-20 2:20</time>
+        </h5>
+      </div>
       This is PD 2.
     </article>
   </section>
 
-  <section name="PD3">
+  <section>
     <h2><a href="#PD3" name="PD3">PD 3</a></h2>
     <article>
+      <div class="feat">
+        <h5 class="pd-date">
+        <time datetime>2036-08-20 3:20</time>
+        </h5>
+      </div>
       This is PD 3.
     </article>
   </section>

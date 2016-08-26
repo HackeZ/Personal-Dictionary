@@ -178,3 +178,24 @@
     display: none;
   }
 }
+
+.feat {
+  text-align: center;
+  border-bottom: 1px dotted #e0e1e6;
+  margin: 0 auto 3.5em;
+}
+
+.pd-date {
+  display: inline-block;
+  position: relative;
+  top: 1.1em;
+  background: #fff;
+  font-family: Lora, Georgia, serif;
+  font-size: 85%;
+  text-align: center;
+  font-weight: 400;
+  font-style: italic;
+  padding: 0 1em;
+  text-transform: none;
+  letter-spacing: 1px;
+}
