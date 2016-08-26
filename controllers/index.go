@@ -27,11 +27,16 @@ func (c *MainController) PdIndex() {
 	c.Data["Title"] = beego.AppConfig.String("login_title")
 	c.Data["User"] = "HackerZ"
 
+	c.Data["PersonalDictionary"], _ = m.GetPersonalDictionaryList(-1, 0, "Createtime")
+
+	// log.Println()
+
 	// runmode = product
 	if c.GetSession("userinfo") != nil {
 		user := c.GetSession("userinfo").(string)
 		c.Data["Title"] = "Welcome to " + user + "' Personal Dictionary."
 		c.Data["User"] = user
+		c.Data["PersonalDictionary"], _ = m.GetPersonalDictionaryList(-1, 0, "Createtime")
 	}
 
 	log.Println("UserSession --> ", user)

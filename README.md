@@ -21,7 +21,7 @@
 ## Dependence
 
 ```
-$ go get github.com/bmizerany/pat
+$ go get github.com/russross/blackfriday
 ```
 
 ## Usage

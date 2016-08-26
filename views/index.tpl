@@ -108,42 +108,19 @@
 
 
   <!-- CONTENT -->
-
+  {{ range .PersonalDictionary }}
   <section>
-    <h2><a href="#PD1" name="PD1">PD 1</a></h2>
+    <h2><a href="#{{.Keyword}}" name="{{.Keyword}}">{{.Keyword}}</a></h2>
     <article>
       <div class="feat">
         <h5 class="pd-date">
-        <time datetime>2016-08-20 11:20</time>
+        <time datetime>{{dateformat .Createtime "2006-01-02 15:04:05"}}</time>
         </h5>
       </div>
-      This is PD 1.
+      {{.Content | pd_markdown | str2html }}
     </article>
   </section>
-
-  <section>
-    <h2><a href="#PD2" name="PD2">PD 2</a></h2>
-    <article>
-      <div class="feat">
-        <h5 class="pd-date">
-        <time datetime>2026-08-20 2:20</time>
-        </h5>
-      </div>
-      This is PD 2.
-    </article>
-  </section>
-
-  <section>
-    <h2><a href="#PD3" name="PD3">PD 3</a></h2>
-    <article>
-      <div class="feat">
-        <h5 class="pd-date">
-        <time datetime>2036-08-20 3:20</time>
-        </h5>
-      </div>
-      This is PD 3.
-    </article>
-  </section>
+  {{ end }}
   <!-- CONTENT -->
 
 
@@ -152,9 +129,9 @@
     <nav class="navbar navbar-vertical-right">
       <h2>词条导航</h2>
       <ul>
-        <li><a href="#PD1">PD 1</a></li>
-        <li><a href="#PD2">PD 2</a></li>
-        <li><a href="#PD3">PD 3</a></li>
+        {{ range .PersonalDictionary }}
+        <li><a href="#{{.Keyword}}">{{.Keyword}}</a></li>
+        {{ end }}
       </ul>
     </nav>
   </aside>
@@ -179,7 +156,7 @@
           <h4 class="modal-title" id="myModalLabel">新词典</h4>
         </div>
         <div class="modal-body">
-          <form id="pd-form" >
+          <form id="pd-form">
             <div class="form-group">
               <label for="recipient-name" class="control-label">词：</label>
               <input type="text" class="form-control" name="Keyword" id="pd_Keyword">
@@ -203,8 +180,8 @@
   $(document).ready(function() {
     $(".add_pd_btn").click(function() {
       console.log("I am AJAX");
-    $('#myModal').modal('hide')
-      // AJAX 提交
+      $('#myModal').modal('hide')
+        // AJAX 提交
       $.ajax({
         type: "POST",
         url: "/pd/add",

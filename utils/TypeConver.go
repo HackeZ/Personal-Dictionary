@@ -2,6 +2,8 @@ package utils
 
 import (
 	"strconv"
+
+	"github.com/russross/blackfriday"
 )
 
 // Author: HackerZ
@@ -16,10 +18,10 @@ func Atoi64(s string) (int64, error) {
 }
 
 // StringsToJSON Format String to JSON.
-// @param s string
+// @param input string
 // @return json string
-func StringsToJSON(str string) string {
-	rs := []rune(str)
+func StringsToJSON(input string) string {
+	rs := []rune(input)
 	jsons := ""
 
 	for _, r := range rs {
@@ -32,4 +34,13 @@ func StringsToJSON(str string) string {
 	}
 
 	return jsons
+}
+
+// StringsToMarkdown Format String to Markdown.
+// @param input string
+// @return output string
+func StringsToMarkdown(input string) (output string) {
+	outputByte := blackfriday.MarkdownBasic([]byte(input))
+	output = string(outputByte)
+	return
 }

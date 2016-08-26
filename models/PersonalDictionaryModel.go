@@ -15,7 +15,7 @@ type PersonalDictionary struct {
 	Keyword string `orm:"size(256);index" form:"Keyword" valid:"Required;MaxSize(256);MinSize(0)"`
 	Content string `orm:"size(256)" form:"Content" valid:"MaxSize(256);MinSize(0)"`
 	// Tags string
-	Createtime time.Time `orm:"type(datetime);auto_now_add" `
+	Createtime time.Time `orm:"type(datetime);auto_now_add"`
 }
 
 // TableName Personal-Dictionary Table Name.
@@ -41,6 +41,22 @@ func checkPD(pd *PersonalDictionary) (err error) {
 }
 
 /************************************************************/
+
+// GetPersonalDictionaryList 获取个人字典列表
+func GetPersonalDictionaryList(page int64, pageSize int64, sort string) (pds []orm.Params, count int64) {
+	o := orm.NewOrm()
+	pd := new(PersonalDictionary)
+	qs := o.QueryTable(pd)
+	var offset int64
+	if page <= 1 {
+		offset = 0
+	} else {
+		offset = (page - 1) * pageSize
+	}
+	qs.Limit(pageSize, offset).OrderBy(sort).Values(&pds, "Keyword", "Content", "Createtime")
+	count, _ = qs.Count()
+	return pds, count
+}
 
 // AddPersonalDictionary 添加一条个人词典
 func AddPersonalDictionary(pd *PersonalDictionary) (int64, error) {
