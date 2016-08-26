@@ -31,3 +31,11 @@ func (c *CommonController) Resp(status bool, str string) {
 	c.Data["json"] = &map[string]interface{}{"status": status, "info": str}
 	c.ServeJSON()
 }
+
+// InfoJump Jump to Info Page and Show Info.
+func (c *CommonController) InfoJump(info, jumpToPath string) {
+	c.Data["Info"] = info
+	c.Data["JumpTo"] = jumpToPath
+	c.Data["JTS"], _ = beego.AppConfig.Int("info_jump_time")
+	c.TplName = "info.tpl"
+}

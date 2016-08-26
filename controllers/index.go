@@ -41,13 +41,20 @@ func (c *MainController) PdIndex() {
 // AddPersonalDictionary 添加一条个人词典
 func (c *MainController) AddPersonalDictionary() {
 
-	// Login Check.
-	user := c.GetSession("userinfo").(string)
+	// runmode = dev
+	user := "HackerZ"
 
-	if user == "" {
-		c.Resp(false, "你还没有登录，请登录后再试！")
-		return
+	// runmode = product
+	if "dev" != beego.AppConfig.String("runmode") {
+		// Login Check.
+		user := c.GetSession("userinfo").(string)
+
+		if user == "" {
+			c.Resp(false, "你还没有登录，请登录后再试！")
+			return
+		}
 	}
+
 	loginUser, _ := m.GetUserByUsername(user)
 
 	keyword := c.GetString("Keyword")

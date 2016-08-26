@@ -85,6 +85,13 @@
           <a class="navbar-brand" href="#">{{ .Title }}</a>
         </div>
         <div>
+          <ul class="nav navbar-nav navbar-left">
+            <li>
+              <!-- Button trigger modal -->
+              <a type="button" class="btn active" data-toggle="modal" data-target="#myModal">
+  添加新词典
+</a></li>
+          </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout">退出登录</a></li>
           </ul>
@@ -94,6 +101,11 @@
     <!-- NAVBAR -->
   </header>
   <!-- HEADER -->
+
+  <section>
+    <h4 id="add_pd_tips" style="color: crimson"></h4>
+  </section>
+
 
   <!-- CONTENT -->
 
@@ -158,6 +170,61 @@
   <!-- FOOTER -->
 
   <div class="backdrop"></div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">新词典</h4>
+        </div>
+        <div class="modal-body">
+          <form id="pd-form" >
+            <div class="form-group">
+              <label for="recipient-name" class="control-label">词：</label>
+              <input type="text" class="form-control" name="Keyword" id="pd_Keyword">
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="control-label">意义：</label>
+              <textarea class="form-control" name="Content" id="pd_Content" data-pd-content=""></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary add_pd_btn">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
+<script>
+  $(document).ready(function() {
+    $(".add_pd_btn").click(function() {
+      console.log("I am AJAX");
+    $('#myModal').modal('hide')
+      // AJAX 提交
+      $.ajax({
+        type: "POST",
+        url: "/pd/add",
+        data: $('#pd-form').serialize(),
+        sync: false,
+        error: function() {
+          $("#add_pd_tips").text("网络异常，请重新登录后重试！");
+        },
+        success: function(data) {
+          if (data.status) {
+            $("#add_pd_tips").text("词典添加成功，请刷新页面查看！");
+            $("#pd_Keyword").val("")
+            $("#pd_Content").val("")
+          } else {
+            $("#add_pd_tips").text(data.info);
+          }
+        }
+      });
+    });
+  });
+</script>
 
 </html>
