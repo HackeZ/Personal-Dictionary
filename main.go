@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 
 	m "Personal-Dictionary/models"
 	_ "Personal-Dictionary/routers"
@@ -34,9 +35,17 @@ func markdown(input string) (output string) {
 	return
 }
 
+// showWrap Show Wrap in Templete.
+func showWrap(input string) (output string) {
+	output = strings.Replace(input, " ", "&nbsp;&nbsp;", -1)
+	output = strings.Replace(output, "\n", "<br />", -1)
+	return
+}
+
 func main() {
 	initialize()
 
 	beego.AddFuncMap("pd_markdown", markdown)
+	beego.AddFuncMap("pd_showwrap", showWrap)
 	beego.Run("127.0.0.1:" + beego.AppConfig.String("httpport"))
 }

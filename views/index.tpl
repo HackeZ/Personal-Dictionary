@@ -67,8 +67,15 @@
     section {
       margin-top: 20px;
       margin-bottom: 150px;
-      text-align: center;
       margin-right: 200px;
+    }
+
+    section h2,h4 {
+      text-align: center;
+    }
+
+    article {
+      margin-left: 12%;
     }
   </style>
 
@@ -117,7 +124,7 @@
         <time datetime>{{dateformat .Createtime "2006-01-02 15:04:05"}}</time>
         </h5>
       </div>
-      {{.Content | pd_markdown | str2html }}
+      {{.Content | pd_markdown | pd_showwrap | str2html }}
     </article>
   </section>
   {{ end }}
@@ -179,7 +186,7 @@
 <script>
   $(document).ready(function() {
     $(".add_pd_btn").click(function() {
-      console.log("I am AJAX");
+      // $('#pd_Content').val.replace('<br />','/n')
       $('#myModal').modal('hide')
         // AJAX 提交
       $.ajax({
