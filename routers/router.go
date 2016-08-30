@@ -23,4 +23,5 @@ func init() {
 	// PD
 	beego.Router("/pd", &controllers.MainController{}, "*:PdIndex")
 	beego.Router("/pd/add", &controllers.MainController{}, "post:AddPersonalDictionary")
+	beego.Router("/pd/del", &controllers.MainController{}, "*:DelPersonalDictionary")
 }

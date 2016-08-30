@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"Personal-Dictionary/utils"
 	"log"
 
 	"github.com/astaxie/beego"
@@ -81,5 +82,36 @@ func (c *MainController) AddPersonalDictionary() {
 		return
 	}
 	c.Resp(true, "新建词典成功！")
+	return
+}
+
+func (c *MainController) DelPersonalDictionary() {
+	// runmode = dev
+	// user := "HackerZ"
+
+	// runmode = product
+	if "dev" != beego.AppConfig.String("runmode") {
+		// Login Check.
+		user := c.GetSession("userinfo").(string)
+
+		if user == "" {
+			c.Resp(false, "你还没有登录，请登录后再试！")
+			return
+		}
+	}
+
+	// loginUser, _ := m.GetUserByUsername(user)
+
+	pdIdString := c.GetString("pd_id")
+	pdId, _ := utils.Atoi64(pdIdString)
+
+	// 数据合法性判读
+
+	_, err := m.DelPersonalDictionary(pdId)
+	if err != nil {
+		c.Resp(false, err.Error())
+		return
+	}
+	c.Resp(true, "删除成功～ 3s后自动刷新页面～")
 	return
 }
