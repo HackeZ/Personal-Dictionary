@@ -51,7 +51,6 @@ func (c *UserController) Login() {
 	c.Data["Title"] = beego.AppConfig.String("login_title")
 
 	// Get Verification Code.
-
 	cpt = captcha.NewWithFilter("/captcha/", store)
 	cpt.ChallengeNums, _ = beego.AppConfig.Int("captcha_length")
 	cpt.StdWidth = 100
@@ -106,10 +105,19 @@ func (c *UserController) SignUp() {
 			c.Resp(true, "注册成功！欢迎使用你的个人词典！")
 			return
 		}
-		c.Resp(false, err.Error())
+		c.Resp(false, "出错了！有可能你的用户名已经被抢注了，请换一个再试！")
 		return
-
 	}
+	// SignUp Fail! resign.
+	c.Data["Title"] = beego.AppConfig.String("signup_title")
+
+	// Get Verification Code.
+	cpt = captcha.NewWithFilter("/captcha/", store)
+	cpt.ChallengeNums, _ = beego.AppConfig.Int("captcha_length")
+	cpt.StdWidth = 100
+	cpt.StdHeight = 42
+
+	c.TplName = "signup.tpl"
 }
 
 // Logout ...

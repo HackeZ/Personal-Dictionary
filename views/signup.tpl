@@ -29,10 +29,14 @@
             });
 
             // 提交登录
-            var URL = "/login"
+            var URL = "/signup"
             $(".submit_btn").click(function() {
-                if($("#id_username").val() == "" || $("#id_password").val() =="") {
-                    $(".login_tips").text("请填写好信息再进行提交～")
+                if ($("#id_username").val() == "" || $("#id_password").val() == "") {
+                    $(".signup_tips").text("请填写好信息再进行提交～")
+                    return
+                }
+                if($("#id_repass").val() !== $("#id_password").val()) {
+                    $(".signup_tips").text("密码不匹配，请重新输入！")
                     return
                 }
                 // AJAX 提交
@@ -42,18 +46,23 @@
                     data: $('#form').serialize(),
                     sync: false,
                     error: function() {
-                        $(".login_tips").text("网络出问题了，请联系管理员！")
+                        $(".signup_tips").text("网络出问题了，请联系管理员！")
                         $("#id_username").val("").focus();
                         $("#id_password").val("");
-                            $("input[name=captcha]").val("");                        
+                        $("#id_repass").val("");
+                        $("#id_email").val("");
+                        $("input[name=captcha]").val("");
                     },
                     success: function(data) {
                         if (data.status) {
                             location.href = "/pd"
+                            $(".signup_tips").text(data.info)
                         } else {
-                            $(".login_tips").text(data.info)
+                            $(".signup_tips").text(data.info)
                             $("#id_username").val("").focus();
                             $("#id_password").val("");
+                            $("#id_repass").val("");
+                            $("#id_email").val("");
                             $("input[name=captcha]").val("");
                             $(".captcha-img").click();
                         }
@@ -78,21 +87,24 @@
             <dd class="pwd_icon">
                 <input id="id_password" name="password" type="password" placeholder="密码" class="login_txtbx" tabindex="2" required/>
             </dd>
+            <dd class="pwd_icon">
+                <input id="id_repass" name="repass" type="password" placeholder="重复你的密码" class="login_txtbx" tabindex="3" required/>
+            </dd>
+            <dd class="email_icon">
+                <input id="id_email" name="email" type="email" placeholder="常用邮箱" class="login_txtbx" tabindex="4" required/>
+            </dd>
             <dd class="val_icon">
                 <div class="checkcode">
                     {{create_captcha}}
-                    <input name="captcha" placeholder="请输入验证码" type="text" class="login_txtbx" tabindex="3" />
+                    <input name="captcha" placeholder="请输入验证码" type="text" class="login_txtbx" tabindex="5" />
                 </div>
             </dd>
             <br>
             <dd>
-                <input type="button" value="立即登陆" class="submit_btn" />
+                <input type="button" value="立即注册" class="submit_btn" />
             </dd>
             <dd>
-                <a class="sign_btn" href="/signup">立即注册</a>
-            </dd>
-            <dd>
-                <p class="login_tips"></p>
+                <p class="signup_tips"></p>
             </dd>
             <dd>
                 <p>{{ .Copyright }}</p>

@@ -31,8 +31,6 @@ func (c *MainController) PdIndex() {
 
 	c.Data["PersonalDictionary"], pdLen = m.GetPersonalDictionaryList("HackerZ", -1, 0, "Createtime")
 
-	// log.Println()
-
 	// runmode = product
 	if c.GetSession("userinfo") != nil {
 		user := c.GetSession("userinfo").(string)
