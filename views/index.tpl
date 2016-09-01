@@ -72,6 +72,7 @@
 
     section h2,h4 {
       text-align: center;
+      margin-left: 12%;
     }
 
     article {
@@ -115,18 +116,24 @@
 
 
   <!-- CONTENT -->
+  {{if .PDEmpty }}
+    <section>
+      <h2>{{ .Tips }}</h2>
+    </section>
+  {{else}}
   {{ range .PersonalDictionary }}
-  <section>
-    <h2><a href="#{{.Keyword}}" name="{{.Keyword}}">{{.Keyword}}</a></h2>
-    <article>
-      <div class="feat">
-        <h5 class="pd-date">
-        <time datetime>{{dateformat .Createtime "2006-01-02 15:04:05"}}</time>
-        </h5>
-      </div>
-      {{.Content | pd_markdown | pd_showwrap | str2html }}
-    </article>
-  </section>
+    <section>
+      <h2><a href="#{{.Keyword}}" name="{{.Keyword}}">{{.Keyword}}</a></h2>
+      <article>
+        <div class="feat">
+          <h5 class="pd-date">
+          <time datetime>{{dateformat .Createtime "2006-01-02 15:04:05"}}</time>
+          </h5>
+        </div>
+        {{.Content | pd_markdown | pd_showwrap | str2html }}
+      </article>
+    </section>
+  {{ end }}
   {{ end }}
   <!-- CONTENT -->
 

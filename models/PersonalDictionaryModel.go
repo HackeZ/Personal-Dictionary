@@ -31,7 +31,7 @@ func init() {
 func checkPD(pd *PersonalDictionary) (err error) {
 	o := orm.NewOrm()
 	var oldPD PersonalDictionary
-	err = o.QueryTable(pd).Filter("Keyword", pd.Keyword).One(&oldPD)
+	err = o.QueryTable(pd).Filter("User", pd.User.Id).Filter("Keyword", pd.Keyword).One(&oldPD)
 	// 没有找到纪录
 	if err == orm.ErrNoRows {
 		return nil

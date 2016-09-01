@@ -24,20 +24,29 @@ func (c *MainController) PdIndex() {
 
 	// runmode = dev
 	user := c.GetSession("userinfo")
+	var pdLen int64
 
 	c.Data["Title"] = beego.AppConfig.String("login_title")
 	c.Data["User"] = "HackerZ"
 
-	c.Data["PersonalDictionary"], _ = m.GetPersonalDictionaryList("HackerZ", -1, 0, "Createtime")
+	c.Data["PersonalDictionary"], pdLen = m.GetPersonalDictionaryList("HackerZ", -1, 0, "Createtime")
 
 	// log.Println()
 
 	// runmode = product
 	if c.GetSession("userinfo") != nil {
 		user := c.GetSession("userinfo").(string)
-		c.Data["Title"] = "Welcome to " + user + "' Personal Dictionary."
+		c.Data["Title"] = "欢迎来到" + user + "的个人词典."
 		c.Data["User"] = user
-		c.Data["PersonalDictionary"], _ = m.GetPersonalDictionaryList(user, -1, 0, "Createtime")
+		c.Data["PersonalDictionary"], pdLen = m.GetPersonalDictionaryList(user, -1, 0, "Createtime")
+	}
+
+	if pdLen == 0 {
+		c.Data["PDEmpty"] = true
+		c.Data["Tips"] = "你还没有创建过属于你的字典，快来试试吧～"
+	} else {
+		c.Data["PDEmpty"] = false
+		c.Data["Tips"] = ""
 	}
 
 	log.Println("UserSession --> ", user)
@@ -48,24 +57,24 @@ func (c *MainController) PdIndex() {
 func (c *MainController) AddPersonalDictionary() {
 
 	// runmode = dev
-	user := c.GetSession("userinfo").(string)
+	user := c.GetSession("userinfo")
+	var userString string
+	if user != nil {
+		userString = c.GetSession("userinfo").(string)
+	} else {
+		userString = "HackerZ"
+	}
 
 	// runmode = product
-	if "dev" == beego.AppConfig.String("runmode") {
+	if "dev" != beego.AppConfig.String("runmode") {
 		// Login Check.
-		user := c.GetSession("userinfo").(string)
-
-		if user == "" {
-			user = "HackerZ"
+		if user == nil {
+			c.Resp(false, "你还没有登录，请登录后再试！")
+			return
 		}
 	}
 
-	if user == "" {
-		c.Resp(false, "你还没有登录，请登录后再试！")
-		return
-	}
-
-	loginUser, _ := m.GetUserByUsername(user)
+	loginUser, _ := m.GetUserByUsername(userString)
 
 	keyword := c.GetString("Keyword")
 	content := c.GetString("Content")
