@@ -32,3 +32,7 @@ $ go get github.com/russross/blackfriday
 $ bee run # if you syncdb already.
 $ ./Personal-Dictionry -syncdb # if you run this app at first time.
 ```
+
+## Problem
+
+- 退出登录之后，验证码失效，可能需要刷新 Cache
