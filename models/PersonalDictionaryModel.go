@@ -56,7 +56,7 @@ func GetPersonalDictionaryList(userName string, page int64, pageSize int64, sort
 	} else {
 		offset = (page - 1) * pageSize
 	}
-	qs.Limit(pageSize, offset).OrderBy(sort).Values(&pds, "Keyword", "Content", "Createtime")
+	qs.Limit(pageSize, offset).OrderBy(sort).Values(&pds, "Id", "Keyword", "Content", "Createtime")
 	count, _ = qs.Count()
 	return pds, count
 }

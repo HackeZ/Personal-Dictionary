@@ -26,17 +26,6 @@
       background-color: #fff;
       box-shadow: inset 0px 0px 100px #ddd;
     }
-    /*header,
-    footer {
-      width: 960px;
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    header {
-      padding: 100px 0;
-    }*/
     
     footer {
       line-height: 1.8;
@@ -54,27 +43,29 @@
       color: #444;
       text-decoration: none;
     }
-    /*.backdrop {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      box-shadow: inset 0px 0px 100px #ddd;
-      z-index: -1;
-      top: 0px;
-      left: 0px;
-    }*/
     
     section {
       margin-top: 20px;
       margin-bottom: 150px;
       margin-right: 200px;
     }
-
-    section h2,h4 {
+    
+    section h2,
+    h4 {
       text-align: center;
       margin-left: 12%;
     }
-
+    
+    .del-pd-btn {
+      right: 16px;
+      top: 16px;
+      height: 54px;
+      text-align: center;
+      float: right;
+      color: red;
+      z-index: 20;
+    }
+    
     article {
       margin-left: 12%;
     }
@@ -117,24 +108,25 @@
 
   <!-- CONTENT -->
   {{if .PDEmpty }}
-    <section>
-      <h2>{{ .Tips }}</h2>
-    </section>
-  {{else}}
-  {{ range .PersonalDictionary }}
-    <section>
-      <h2><a href="#{{.Keyword}}" name="{{.Keyword}}">{{.Keyword}}</a></h2>
-      <article>
-        <div class="feat">
-          <h5 class="pd-date">
+  <section>
+    <h2>{{ .Tips }}</h2>
+  </section>
+  {{else}} {{ range .PersonalDictionary }}
+  <section>
+    <h2><a href="#{{.Keyword}}" name="{{.Keyword}}">{{.Keyword}}</a></h2>
+    <a class="del-pd-btn" href="##" data-pd-id={{ .Id }}>
+      <i>delete me</i>
+    </a>
+    <article>
+      <div class="feat">
+        <h5 class="pd-date">
           <time datetime>{{dateformat .Createtime "2006-01-02 15:04:05"}}</time>
           </h5>
-        </div>
-        {{.Content | pd_markdown | pd_showwrap | str2html }}
-      </article>
-    </section>
-  {{ end }}
-  {{ end }}
+      </div>
+      {{.Content | pd_markdown | pd_showwrap | str2html }}
+    </article>
+  </section>
+  {{ end }} {{ end }}
   <!-- CONTENT -->
 
 
@@ -214,6 +206,23 @@
           }
         }
       });
+    });
+
+    $(".del-pd-btn").click(function() {
+      if (confirm("一旦删除则无法撤回，你还要继续吗？")) {
+        $.ajax({
+          type: "POST",
+          url: "/pd/del",
+          data: "pd_id=" + $('.del-pd-btn').data('pd-id'),
+          sync: false,
+          error: function() {
+            alert("网络故障，现在还无法进行删除，请稍后再试！")
+          },
+          success: function() {
+            alert("删除成功！请刷新页面查看！")
+          }
+        });
+      }
     });
   });
 </script>

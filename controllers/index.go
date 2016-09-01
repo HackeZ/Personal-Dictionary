@@ -118,6 +118,8 @@ func (c *MainController) DelPersonalDictionary() {
 	pdIdString := c.GetString("pd_id")
 	pdId, _ := utils.Atoi64(pdIdString)
 
+	log.Println("del pd_id -->", pdId)
+
 	// 数据合法性判读
 
 	_, err := m.DelPersonalDictionary(pdId)
