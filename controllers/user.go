@@ -19,6 +19,7 @@ type UserController struct {
 }
 
 var cpt *captcha.Captcha
+var store cache.Cache
 
 // Login do Login or Show Login Page.
 func (c *UserController) Login() {
@@ -50,7 +51,7 @@ func (c *UserController) Login() {
 	c.Data["Title"] = beego.AppConfig.String("login_title")
 
 	// Get Verification Code.
-	store := cache.NewMemoryCache()
+
 	cpt = captcha.NewWithFilter("/captcha/", store)
 	cpt.ChallengeNums, _ = beego.AppConfig.Int("captcha_length")
 	cpt.StdWidth = 100
@@ -115,6 +116,11 @@ func (c *UserController) SignUp() {
 func (c *UserController) Logout() {
 	c.DelSession("userinfo")
 	c.Ctx.Redirect(302, "/login")
+}
+
+// init init a global store
+func init() {
+	store = cache.NewMemoryCache()
 }
 
 // Resp Response request Status and Info.

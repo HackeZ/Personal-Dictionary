@@ -31,6 +31,10 @@
             // 提交登录
             var URL = "/login"
             $(".submit_btn").click(function() {
+                if($("#id_username").val() == "" || $("#id_password").val() =="") {
+                    $(".login_tips").text("请填写好信息再进行提交～")
+                    return
+                }
                 // AJAX 提交
                 $.ajax({
                     type: "POST",
@@ -83,6 +87,9 @@
             <br>
             <dd>
                 <input type="button" value="立即登陆" class="submit_btn" />
+            </dd>
+            <dd>
+                <a class="sign_btn" href="">立即注册</a>
             </dd>
             <dd>
                 <p class="login_tips"></p>
