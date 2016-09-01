@@ -45,7 +45,7 @@
                     },
                     success: function(data) {
                         if (data.status) {
-                            location.href = "/pb"
+                            location.href = "/pd"
                         } else {
                             $(".login_tips").text(data.info)
                             $("#id_username").val("").focus();

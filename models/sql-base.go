@@ -9,6 +9,7 @@ import (
 	utils "Personal-Dictionary/utils"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
@@ -35,7 +36,7 @@ func Connect() {
 	switch dbType {
 	case "mysql":
 		orm.RegisterDriver("mysql", orm.DRMySQL)
-		dns = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbUser, dbPass, dbHost, dbPort, dbName)
+		dns = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&loc=Local", dbUser, dbPass, dbHost, dbPort, dbName)
 		break
 	case "postgres":
 		orm.RegisterDriver("postgres", orm.DRPostgres)
@@ -91,7 +92,7 @@ func createDB() {
 
 	switch dbType {
 	case "mysql":
-		dns = fmt.Sprintf("%s:%s@tcp(%s:%s)/?charset=utf8", dbUser, dbPass, dbHost, dbPort)
+		dns = fmt.Sprintf("%s:%s@tcp(%s:%s)/?charset=utf8&loc=Local", dbUser, dbPass, dbHost, dbPort)
 		sqlstring = fmt.Sprintf("CREATE DATABASE  if not exists `%s` CHARSET utf8 COLLATE utf8_general_ci", dbName)
 		break
 	case "postgres":
@@ -115,28 +116,43 @@ func createDB() {
 		panic(err.Error())
 	}
 	r, err := db.Exec(sqlstring)
+	beelog := logs.NewLogger(100)
 	if err != nil {
-		log.Println(err)
+		beelog.Error(err.Error())
 		log.Println(r)
 	} else {
-		log.Println("Database ", dbName, " created")
+		beelog.Info("Database ", dbName, " created")
 	}
+	defer beelog.Close()
 	defer db.Close()
 }
 
 func insertUser() {
-	fmt.Println("=== insert User start... ===")
-	u := new(User)
-	u.Username = "HackerZ"
+	beelog := logs.NewLogger(10)
+	beelog.Info("=== insert User start... ===")
+	u1 := new(User)
+	u1.Username = "HackerZ"
 	salt := utils.GetNewSalt(8)
-	u.Salt = salt
-	u.Password = utils.PassEncode("admin", salt)
-	u.Email = "hackerzgz@gmail.com"
+	u1.Salt = salt
+	u1.Password = utils.PassEncode("admin", salt)
+	u1.Email = "hackerzgz@gmail.com"
+
+	u2 := new(User)
+	u2.Username = "JiangJJ"
+	salt = utils.GetNewSalt(8)
+	u2.Salt = salt
+	u2.Password = utils.PassEncode("admin", salt)
+	u2.Email = "JiangJJ@gmail.com"
+
+	Users := []User{*u1, *u2}
 
 	o := orm.NewOrm()
-	_, err := o.Insert(u)
+	// use len(Users) make sure InsertMulti not Order.
+	_, err := o.InsertMulti(len(Users), Users)
 	if err != nil {
-		log.Println(" insert user error -->", err.Error())
+		beelog.Error("insert users error -->", err.Error())
 	}
-	fmt.Println("=== insert User done... ===")
+	beelog.Info("=== insert User done... ===")
+	beelog.Flush()
+	beelog.Close()
 }

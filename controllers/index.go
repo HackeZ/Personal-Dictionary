@@ -16,7 +16,7 @@ type MainController struct {
 
 // Index Personal Dictionary Index
 func (c *MainController) Index() {
-	c.Redirect("/pb", 302)
+	c.Redirect("/pd", 302)
 }
 
 // PdIndex Show PdIndex
@@ -28,7 +28,7 @@ func (c *MainController) PdIndex() {
 	c.Data["Title"] = beego.AppConfig.String("login_title")
 	c.Data["User"] = "HackerZ"
 
-	c.Data["PersonalDictionary"], _ = m.GetPersonalDictionaryList(-1, 0, "Createtime")
+	c.Data["PersonalDictionary"], _ = m.GetPersonalDictionaryList("HackerZ", -1, 0, "Createtime")
 
 	// log.Println()
 
@@ -37,7 +37,7 @@ func (c *MainController) PdIndex() {
 		user := c.GetSession("userinfo").(string)
 		c.Data["Title"] = "Welcome to " + user + "' Personal Dictionary."
 		c.Data["User"] = user
-		c.Data["PersonalDictionary"], _ = m.GetPersonalDictionaryList(-1, 0, "Createtime")
+		c.Data["PersonalDictionary"], _ = m.GetPersonalDictionaryList(user, -1, 0, "Createtime")
 	}
 
 	log.Println("UserSession --> ", user)
@@ -48,17 +48,21 @@ func (c *MainController) PdIndex() {
 func (c *MainController) AddPersonalDictionary() {
 
 	// runmode = dev
-	user := "HackerZ"
+	user := c.GetSession("userinfo").(string)
 
 	// runmode = product
-	if "dev" != beego.AppConfig.String("runmode") {
+	if "dev" == beego.AppConfig.String("runmode") {
 		// Login Check.
 		user := c.GetSession("userinfo").(string)
 
 		if user == "" {
-			c.Resp(false, "你还没有登录，请登录后再试！")
-			return
+			user = "HackerZ"
 		}
+	}
+
+	if user == "" {
+		c.Resp(false, "你还没有登录，请登录后再试！")
+		return
 	}
 
 	loginUser, _ := m.GetUserByUsername(user)

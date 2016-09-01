@@ -15,13 +15,14 @@ import (
 // User Save User Info.
 type User struct {
 	Id            int64
-	Username      string    `orm:"unique;size(32)" form:"Username"  valid:"Required;MaxSize(20);MinSize(6)"`
-	Password      string    `orm:"size(64)" form:"Password" valid:"Required;MaxSize(20);MinSize(6)"`
-	Repassword    string    `orm:"-" form:"Repassword" valid:"Required"`
-	Salt          string    `orm:"size(32)" form:"Salt" valid:"Required;MaxSize(20);MinSize(6)"`
-	Email         string    `orm:"size(32)" form:"Email" valid:"Email"`
-	Lastlogintime time.Time `orm:"null;type(datetime)" form:"-"`
-	Createtime    time.Time `orm:"type(datetime);auto_now_add" `
+	Username      string                `orm:"unique;size(32)" form:"Username" valid:"Required;MaxSize(20);MinSize(6)"`
+	Password      string                `orm:"size(64)" form:"Password" valid:"Required;MaxSize(20);MinSize(6)"`
+	Repassword    string                `orm:"-" form:"Repassword" valid:"Required"`
+	Salt          string                `orm:"size(32)" form:"Salt" valid:"Required;MaxSize(20);MinSize(6)"`
+	Email         string                `orm:"size(32)" form:"Email" valid:"Email"`
+	PDs           []*PersonalDictionary `orm:"reverse(many)"`
+	Lastlogintime time.Time             `orm:"null;type(datetime)" form:"-"`
+	Createtime    time.Time             `orm:"type(datetime);auto_now_add" `
 }
 
 // TableName User Table Name.

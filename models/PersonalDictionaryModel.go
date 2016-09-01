@@ -13,7 +13,7 @@ type PersonalDictionary struct {
 	Id      int64
 	User    *User  `orm:"rel(fk);size(32)" form:"User"  valid:"Required;MaxSize(20);MinSize(6)"`
 	Keyword string `orm:"size(256);index" form:"Keyword" valid:"Required;MaxSize(256);MinSize(0)"`
-	Content string `orm:"size(256)" form:"Content" valid:"MaxSize(256);MinSize(0)"`
+	Content string `orm:"type(text)" form:"Content" valid:"MaxSize(256);MinSize(0)"`
 	// Tags string
 	Createtime time.Time `orm:"type(datetime);auto_now_add"`
 }
@@ -43,10 +43,13 @@ func checkPD(pd *PersonalDictionary) (err error) {
 /************************************************************/
 
 // GetPersonalDictionaryList 获取个人字典列表
-func GetPersonalDictionaryList(page int64, pageSize int64, sort string) (pds []orm.Params, count int64) {
+func GetPersonalDictionaryList(userName string, page int64, pageSize int64, sort string) (pds []orm.Params, count int64) {
 	o := orm.NewOrm()
+	user, _ := GetUserByUsername(userName)
+
 	pd := new(PersonalDictionary)
-	qs := o.QueryTable(pd)
+	qs := o.QueryTable(pd).Filter("User", user.Id).RelatedSel()
+
 	var offset int64
 	if page <= 1 {
 		offset = 0
