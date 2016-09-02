@@ -112,6 +112,9 @@ func UpdateUser(u *User) (int64, error) {
 	if len(u.Email) > 0 {
 		user["Email"] = u.Email
 	}
+	if time.Now().Day() == u.Lastlogintime.Day() {
+		user["Lastlogintime"] = u.Lastlogintime
+	}
 
 	var table User
 	number, err := o.QueryTable(table).Filter("Id", u.Id).Update(user)
@@ -126,15 +129,10 @@ func DelUserById(Id int64) (int64, error) {
 	return status, err
 }
 
-/********************* Danger
-  Should Be Del in Produce Env.
-   *************************/
-
 // GetUserByUsername 获取用户信息（用于登录验证）
 func GetUserByUsername(username string) (user User, err error) {
 	user = User{Username: username}
 	o := orm.NewOrm()
-	log.Println("user -->", user)
 
 	err = o.Read(&user, "Username")
 	return user, err

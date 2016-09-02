@@ -17,7 +17,7 @@
 - [MQ](http://baike.baidu.com/link?url=_oODT10riIrKTGHD3evOZNNg5SOHpxTf_KKkstiavuHmXUY9Fkvz0_nDH599K49yxEll1FVtSXeclScPJ76fVHY49WfPxeHwfoju5sZqNc_)
 - [面包屑](http://baike.baidu.com/link?url=rM6FBTTTRKhNcn5JgAjD2ctjbew9xXM6JGh4MPxHlwyWz8oOLjJy_ZfKleYzHs93TTY_ss6Z5P7QUUPr0wzbtq)
 - [锚点链接]()
-- [mysql时区问题]
+- [mysql时区问题]()
     + sql-base.go --> root:passwd@tcp(localhost:3306)/dbname?charset=utf8& `loc=Local`
 
 ## Dependence
@@ -29,10 +29,12 @@ $ go get github.com/russross/blackfriday
 ## Usage
 
 ```
+// Please set runmode in app.conf first when you use it in Server!
 $ bee run # if you syncdb already.
 $ ./Personal-Dictionry -syncdb # if you run this app at first time.
 ```
 
 ## Problem
 
-- HackerZ 用户可以看到所有创建的词典
+- 不支持 markdown 的多行代码
+- 不支持空格

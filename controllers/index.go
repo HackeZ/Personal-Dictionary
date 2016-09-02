@@ -27,11 +27,7 @@ func (c *MainController) PdIndex() {
 	var pdLen int64
 
 	c.Data["Title"] = beego.AppConfig.String("login_title")
-	c.Data["User"] = "HackerZ"
 
-	c.Data["PersonalDictionary"], pdLen = m.GetPersonalDictionaryList("HackerZ", -1, 0, "Createtime")
-
-	// runmode = product
 	if c.GetSession("userinfo") != nil {
 		user := c.GetSession("userinfo").(string)
 		c.Data["Title"] = "欢迎来到 " + user + " 的个人词典."

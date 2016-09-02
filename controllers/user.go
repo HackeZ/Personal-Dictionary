@@ -3,7 +3,6 @@ package controllers
 import (
 	"Personal-Dictionary/utils"
 	"errors"
-	"log"
 	"time"
 
 	m "Personal-Dictionary/models"
@@ -25,7 +24,6 @@ var store cache.Cache
 func (c *UserController) Login() {
 
 	isAjax := c.GetString("isajax")
-	log.Println("isAjax -->", isAjax)
 
 	if isAjax == "1" {
 		// Captcha Verification.
