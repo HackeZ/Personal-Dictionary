@@ -49,6 +49,7 @@ func (c *UserController) Login() {
 	}
 	// Login Fail! relogin.
 	c.Data["Title"] = beego.AppConfig.String("login_title")
+	c.Data["Copyright"] = beego.AppConfig.String("copyright")
 
 	// Get Verification Code.
 	cpt = captcha.NewWithFilter("/captcha/", store)
@@ -110,6 +111,7 @@ func (c *UserController) SignUp() {
 	}
 	// SignUp Fail! resign.
 	c.Data["Title"] = beego.AppConfig.String("signup_title")
+	c.Data["Copyright"] = beego.AppConfig.String("copyright")
 
 	// Get Verification Code.
 	cpt = captcha.NewWithFilter("/captcha/", store)

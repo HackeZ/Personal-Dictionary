@@ -34,7 +34,7 @@ func (c *MainController) PdIndex() {
 	// runmode = product
 	if c.GetSession("userinfo") != nil {
 		user := c.GetSession("userinfo").(string)
-		c.Data["Title"] = "欢迎来到" + user + "的个人词典."
+		c.Data["Title"] = "欢迎来到 " + user + " 的个人词典."
 		c.Data["User"] = user
 		c.Data["PersonalDictionary"], pdLen = m.GetPersonalDictionaryList(user, -1, 0, "Createtime")
 	}
@@ -80,6 +80,7 @@ func (c *MainController) AddPersonalDictionary() {
 	// 数据合法性判断
 	if keyword == "" || content == "" {
 		c.Resp(false, "请先填写好数据再提交！")
+		return
 	}
 
 	pd := new(m.PersonalDictionary)

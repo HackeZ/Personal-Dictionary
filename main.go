@@ -37,7 +37,7 @@ func markdown(input string) (output string) {
 
 // showWrap Show Wrap in Templete.
 func showWrap(input string) (output string) {
-	output = strings.Replace(input, " ", "&nbsp;&nbsp;", -1)
+	output = strings.Replace(input, " ", " ", -1)
 	output = strings.Replace(output, "\n", "<br />", -1)
 	return
 }

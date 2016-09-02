@@ -31,7 +31,7 @@
             // 提交登录
             var URL = "/login"
             $(".submit_btn").click(function() {
-                if($("#id_username").val() == "" || $("#id_password").val() =="") {
+                if ($("#id_username").val() == "" || $("#id_password").val() == "") {
                     $(".login_tips").text("请填写好信息再进行提交～")
                     return
                 }
@@ -45,15 +45,14 @@
                         $(".login_tips").text("网络出问题了，请联系管理员！")
                         $("#id_username").val("").focus();
                         $("#id_password").val("");
-                            $("input[name=captcha]").val("");                        
+                        $("input[name=captcha]").val("");
                     },
                     success: function(data) {
                         if (data.status) {
                             location.href = "/pd"
                         } else {
                             $(".login_tips").text(data.info)
-                            $("#id_username").val("").focus();
-                            $("#id_password").val("");
+                            $("#id_password").val("").focus();
                             $("input[name=captcha]").val("");
                             $(".captcha-img").click();
                         }
@@ -95,7 +94,7 @@
                 <p class="login_tips"></p>
             </dd>
             <dd>
-                <p>{{ .Copyright }}</p>
+                <p>{{ .Copyright | pd_markdown | str2html }}</p>
             </dd>
         </form>
 

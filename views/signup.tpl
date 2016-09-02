@@ -107,7 +107,7 @@
                 <p class="signup_tips"></p>
             </dd>
             <dd>
-                <p>{{ .Copyright }}</p>
+                <p>{{ .Copyright | pd_markdown | str2html }}</p>
             </dd>
         </form>
 

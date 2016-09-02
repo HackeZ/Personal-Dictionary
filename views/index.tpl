@@ -7,9 +7,11 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
   <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/bootstrap-markdown/2.10.0/css/bootstrap-markdown.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/pd_index.css">
   <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap-markdown/2.10.0/js/bootstrap-markdown.min.js"></script>
 
   <style type="text/css">
     *,
@@ -68,6 +70,7 @@
     
     article {
       margin-left: 12%;
+      word-break:break-word;
     }
   </style>
 
@@ -184,6 +187,9 @@
 
 <script>
   $(document).ready(function() {
+
+    $("#pd_Content").markdown();
+
     $(".add_pd_btn").click(function() {
       // $('#pd_Content').val.replace('<br />','/n')
       $('#myModal').modal('hide')
