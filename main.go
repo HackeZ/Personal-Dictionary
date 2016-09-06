@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "net/http/pprof"
 	"os"
 	"strings"
 
@@ -15,6 +16,8 @@ func initialize() {
 
 	initArgs()
 
+	// initPprof()
+
 	m.Connect()
 }
 
@@ -28,6 +31,10 @@ func initArgs() {
 		}
 	}
 }
+
+// func initPprof(){
+// 	beego
+// }
 
 // Support Markdown Function.
 func markdown(input string) (output string) {

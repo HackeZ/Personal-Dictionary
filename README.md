@@ -20,6 +20,11 @@
 - [锚点链接]()
 - [mysql时区问题]()
     + sql-base.go --> root:passwd@tcp(localhost:3306)/dbname?charset=utf8& `loc=Local`
+- [结伴发布]()
+    + 指的是开发与运维在一起上线应用（主要因为开发环境和生产环境不一致而产生的），效率低下。
+- [Zabbix](http://baike.baidu.com/link?url=Hy2yXjgxcG55hPGLdRIdpz1M3Ck28Bo8D2jh4H0q6Tpdj8j8X5Qot4L548yR0fstqU6IcCPspa-c3PaHXhkCYq)
+    + zabbix（音同 zæbix）是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。
+
 
 ## Dependence
 
