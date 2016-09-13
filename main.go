@@ -54,5 +54,5 @@ func main() {
 
 	beego.AddFuncMap("pd_markdown", markdown)
 	beego.AddFuncMap("pd_showwrap", showWrap)
-	beego.Run("127.0.0.1:" + beego.AppConfig.String("httpport"))
+	beego.Run()
 }

@@ -12,7 +12,7 @@ import (
 type PersonalDictionary struct {
 	Id      int64
 	User    *User  `orm:"rel(fk);size(32)" form:"User"  valid:"Required;MaxSize(20);MinSize(6)"`
-	Keyword string `orm:"size(256);index" form:"Keyword" valid:"Required;MaxSize(256);MinSize(0)"`
+	Keyword string `orm:"size(255);index;utf8_general_ci" form:"Keyword" valid:"Required;MaxSize(256);MinSize(0)"`
 	Content string `orm:"type(text)" form:"Content" valid:"MaxSize(256);MinSize(0)"`
 	// Tags string
 	Createtime time.Time `orm:"type(datetime);auto_now_add"`
